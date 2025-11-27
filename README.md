@@ -29,8 +29,8 @@ docker compose up -d
 ```bash
 sudo apt-get update && sudo apt-get upgrade -y
 sudo apt-get install -y nodejs npm git dhcpcd5
-git clone https://github.com/jatsoca/risco_stack.git
-cd risco_stack/risco/app
+git clone https://github.com/jatsoca/risco_stack_RPi.git
+cd risco_stack_RPi/risco/app
 npm install --include=dev
 npm run build
 ```
@@ -45,8 +45,8 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=pi
-WorkingDirectory=/home/pi/risco_stack/risco
-ExecStart=/usr/bin/node /home/pi/risco_stack/risco/app/dist/main.js
+WorkingDirectory=/home/pi/risco_stack_RPi/risco
+ExecStart=/usr/bin/node /home/pi/risco_stack_RPi/risco/app/dist/main.js
 Restart=on-failure
 
 [Install]
@@ -82,7 +82,7 @@ sudo systemctl enable --now risco-gateway
 - `heartbeat_interval_ms`: latido opcional para monitoreo externo.
 
 ## Migrar a otro equipo
-- Copia el repo y el contenido de `risco/data`, luego `docker compose up -d` o ejecuta el servicio con Node como arriba.
+- Copia el repo y el contenido de `risco/data` (ahora en `risco_stack_RPi`), luego `docker compose up -d` o ejecuta el servicio con Node como arriba.
 - Para empaquetar Docker multi-arch:
 ```bash
 docker buildx build \
