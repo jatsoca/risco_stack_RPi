@@ -1,0 +1,9 @@
+node_modules
+*.log
+mosquitto/data
+mosquitto/log
+risco/data
+risco/app/node_modules
+risco/app/dist
+risco/risco-lan-bridge/node_modules
+risco/risco-lan-bridge/dist/*.map

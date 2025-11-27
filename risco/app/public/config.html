@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Configuraci&oacute;n Risco Gateway</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>Configuraci&oacute;n</h1>
+    </div>
+    <nav class="nav-actions">
+      <a href="/" class="btn-link">Dashboard</a>
+      <button id="logout-btn" class="ghost">Salir</button>
+    </nav>
+  </header>
+
+  <div class="page">
+    <div class="card">
+      <h2>Panel RISCO</h2>
+      <form id="config-form">
+        <div class="form-grid">
+          <div class="field">
+            <label for="panelIp">IP panel</label>
+            <input id="panelIp" name="panelIp" required>
+          </div>
+          <div class="field">
+            <label for="panelPort">Puerto panel</label>
+            <input id="panelPort" name="panelPort" type="number" min="1" max="65535" required>
+          </div>
+          <div class="field">
+            <label for="panelPassword">Contrase&ntilde;a panel</label>
+            <input id="panelPassword" name="panelPassword" type="password" required>
+          </div>
+          <div class="field">
+            <label for="panelId">Panel ID</label>
+            <input id="panelId" name="panelId" required>
+          </div>
+        </div>
+
+        <h3>Servicios</h3>
+        <div class="form-grid">
+          <div class="field">
+            <label for="webPort">Web HTTP port</label>
+            <input id="webPort" name="webPort" type="number" min="1" max="65535">
+          </div>
+          <div class="field">
+            <label for="wsPath">WS path</label>
+            <input id="wsPath" name="wsPath">
+          </div>
+          <div class="field">
+            <label for="modbusHost">Modbus host</label>
+            <input id="modbusHost" name="modbusHost">
+          </div>
+          <div class="field">
+            <label for="modbusPort">Modbus port</label>
+            <input id="modbusPort" name="modbusPort" type="number" min="1" max="65535">
+          </div>
+          <div class="field">
+            <label for="logLevel">Nivel de log</label>
+            <select id="logLevel" name="logLevel">
+              <option value="error">error</option>
+              <option value="warn">warn</option>
+              <option value="info">info</option>
+              <option value="verbose">verbose</option>
+              <option value="debug">debug</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="logColorize">Colorear logs</label>
+            <input id="logColorize" name="logColorize" type="checkbox">
+          </div>
+          <div class="field">
+            <label for="heartbeatMs">Heartbeat ms</label>
+            <input id="heartbeatMs" name="heartbeatMs" type="number" min="0">
+          </div>
+        </div>
+
+        <h3>IP del Gateway (Raspberry)</h3>
+        <div class="form-grid">
+          <div class="field">
+            <label for="hostIp">Nueva IP</label>
+            <input id="hostIp" name="hostIp" placeholder="192.168.1.50">
+          </div>
+          <div class="field">
+            <label for="hostCidr">Prefijo CIDR</label>
+            <input id="hostCidr" name="hostCidr" type="number" min="0" max="32" placeholder="24">
+          </div>
+          <div class="field">
+            <label for="hostGw">Gateway</label>
+            <input id="hostGw" name="hostGw" placeholder="192.168.1.1">
+          </div>
+          <div class="field">
+            <label>&nbsp;</label>
+            <button id="apply-host-ip" type="button">Aplicar IP y reiniciar</button>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="save-btn" type="submit">Guardar</button>
+          <button id="save-restart-btn" type="button">Guardar y reiniciar</button>
+          <button id="restart-btn" type="button" class="ghost">Reiniciar servicio</button>
+          <button id="factory-btn" type="button" class="ghost">Restablecer a f&aacute;brica</button>
+        </div>
+        <p class="muted" id="status-msg"></p>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>Contrase&ntilde;a admin</h2>
+      <form id="password-form" class="form-grid">
+        <div class="field">
+          <label for="currentPassword">Actual</label>
+          <input id="currentPassword" type="password" required>
+        </div>
+        <div class="field">
+          <label for="newPassword">Nueva</label>
+          <input id="newPassword" type="password" required>
+        </div>
+        <div class="field">
+          <label for="confirmPassword">Confirmar</label>
+          <input id="confirmPassword" type="password" required>
+        </div>
+      </form>
+      <div class="actions">
+        <button id="change-pass-btn">Actualizar contrase&ntilde;a</button>
+      </div>
+      <p class="muted" id="pass-msg"></p>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+</body>
+</html>

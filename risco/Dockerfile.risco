@@ -1,0 +1,35 @@
+FROM node:20-alpine AS build
+
+WORKDIR /app
+
+# Dependencia local requerida por package-lock (file:../risco-lan-bridge)
+COPY ./risco-lan-bridge /risco-lan-bridge
+
+# Instala dependencias (incluye dev para compilar TypeScript)
+COPY ./app/package*.json ./app/tsconfig.json ./app/yarn.lock ./
+RUN npm install --include=dev \
+  && npm install tslib@^2.6.2
+
+# Copia el codigo y construye (sin node_modules del host)
+COPY ./app/src /app/src
+COPY ./app/public /app/public
+COPY ./app/config-sample.json /app/config-sample.json
+RUN npm run build && npm prune --production
+
+FROM node:20-alpine
+WORKDIR /app
+ENV NODE_ENV=production
+
+RUN apk add --no-cache wget && mkdir -p /data
+
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/public ./public
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /risco-lan-bridge /risco-lan-bridge
+COPY ./app/config-sample.json ./config-sample.json
+COPY ./config.default.json ./config.default.json
+
+EXPOSE 8080 502
+VOLUME ["/data"]
+
+CMD ["node", "dist/main.js"]

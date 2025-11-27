@@ -1,0 +1,25 @@
+services:
+  risco:
+    ports:
+      - "8080:8080"  # dashboard/WS
+      - "502:502"    # Modbus TCP
+    build:
+      context: ./risco
+      dockerfile: Dockerfile.risco
+    container_name: risco-mqtt-local
+    environment:
+      RISCO_MQTT_HA_CONFIG_FILE: /data/config.json
+      RISCO_MQTT_HA_DEFAULT_CONFIG: /app/config.default.json
+    volumes:
+      - ./risco/data:/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    mem_limit: 512m
+    cpus: 1.0
+    restart: unless-stopped
+
+

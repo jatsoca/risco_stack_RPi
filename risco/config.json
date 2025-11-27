@@ -1,0 +1,31 @@
+{
+  "log": "info",
+  "logColorize": true,
+  "panel_name": "Risco Alarm",
+  "heartbeat_interval_ms": 30000,
+  "web": {
+    "enable": true,
+    "http_port": 8080,
+    "ws_path": "/ws"
+  },
+  "modbus": {
+    "enable": true,
+    "port": 502,
+    "host": "0.0.0.0"
+  },
+  "panel": {
+    "panelIp": "172.16.84.2",
+    "panelPort": 1000,
+    "panelPassword": 5678,
+    "panelId": "0001",
+    "socketMode": "direct",
+    "watchDogInterval": 5000,
+    "commandsLog": true
+  },
+  "zones": {
+    "default": {
+      "off_delay": 0,
+      "name_prefix": ""
+    }
+  }
+}

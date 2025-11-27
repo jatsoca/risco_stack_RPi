@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Risco Gateway</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page">
+    <div class="card">
+      <h1>Risco Gateway</h1>
+      <p class="muted">Autenticaci&oacute;n requerida para acceder al dashboard y la configuraci&oacute;n.</p>
+      <form id="login-form" class="form-grid">
+        <div class="field">
+          <label for="username">Usuario</label>
+          <input id="username" name="username" autocomplete="username" required value="admin">
+        </div>
+        <div class="field">
+          <label for="password">Contrase&ntilde;a</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+        </div>
+      </form>
+      <div class="actions">
+        <button id="login-btn">Ingresar</button>
+        <span class="muted">Usuario por defecto: admin / Admin123</span>
+      </div>
+      <div id="login-error" class="muted"></div>
+    </div>
+  </div>
+  <script src="login.js"></script>
+</body>
+</html>
