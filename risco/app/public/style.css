@@ -37,6 +37,21 @@ h1 { margin: 0; letter-spacing: 0.5px; }
   gap: 10px;
   align-items: center;
 }
+.branding {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.branding img {
+  display: block;
+  height: 34px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+}
+.branding .logo-risco {
+  height: 28px;
+  opacity: 0.9;
+}
 .btn-link {
   color: var(--fg);
   text-decoration: none;
