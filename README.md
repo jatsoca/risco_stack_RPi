@@ -63,6 +63,26 @@ sudo systemctl enable --now risco-gateway
   `/etc/sudoers.d/risco-ip` con  
   `pi ALL=(root) NOPASSWD:/usr/local/bin/set-ip-rpi.sh`
 - En la página `/config`, usar el bloque “IP del Gateway” (IP/CIDR/Gateway). Si el script no existe, mostrará “no soportado”.
+- Script de ejemplo (`/usr/local/bin/set-ip-rpi.sh`):
+```bash
+#!/bin/sh
+IP="$1"
+CIDR="$2"
+GW="$3"
+CONF=/etc/dhcpcd.conf
+if [ -z "$IP" ] || [ -z "$CIDR" ] || [ -z "$GW" ]; then
+  echo "missing args"
+  exit 1
+fi
+cat <<EOF > "$CONF"
+interface eth0
+static ip_address=${IP}/${CIDR}
+static routers=${GW}
+static domain_name_servers=${GW}
+EOF
+systemctl restart dhcpcd
+```
+Dar permisos: `sudo chmod +x /usr/local/bin/set-ip-rpi.sh`
 
 ## Configuración y credenciales
 - Runtime lee `/data/config.json` (montado desde `./risco/data`). Si falta, se copia `config.default.json`.

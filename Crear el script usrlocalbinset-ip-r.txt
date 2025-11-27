@@ -1,0 +1,15 @@
+Crear el script /usr/local/bin/set-ip-rpi.sh (ejemplo con dhcpcd):
+
+#!/bin/sh
+IP="$1"
+CIDR="$2"
+GW="$3"
+CONF=/etc/dhcpcd.conf
+[ -z "$IP" ] && exit 1
+cat <<EOF > "$CONF"
+interface eth0
+static ip_address=${IP}/${CIDR}
+static routers=${GW}
+static domain_name_servers=${GW}
+EOF
+systemctl restart dhcpcd
