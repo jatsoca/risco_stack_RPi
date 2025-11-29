@@ -8,6 +8,15 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@vanackej/risco-lan-bridge/*": [
+        "../risco-lan-bridge/dist/*"
+      ],
+      "@vanackej/risco-lan-bridge": [
+        "../risco-lan-bridge/dist"
+      ]
+    },
     "lib": [
       "ES2021"
     ]

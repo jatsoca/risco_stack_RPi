@@ -31,6 +31,11 @@ sudo apt-get update && sudo apt-get upgrade -y
 sudo apt-get install -y nodejs npm git dhcpcd5
 git clone https://github.com/jatsoca/risco_stack_RPi.git
 cd risco_stack_RPi/risco/app
+# Construye la librería local primero (para asegurar dist/):
+cd ../risco-lan-bridge
+npm install --include=dev
+npm run build
+cd ../app
 npm install --include=dev
 npm run build
 ```
