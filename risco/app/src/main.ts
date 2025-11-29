@@ -33,7 +33,7 @@ try {
       console.error('No config found and no default config available');
       process.exit(1);
     }
-    await fs.promises.mkdir(path.dirname(dataPath), { recursive: true });
+    fs.mkdirSync(path.dirname(dataPath), { recursive: true });
     fs.copyFileSync(fallbackDefault, dataPath);
     configPath = dataPath;
     console.log(`Config not found. Copied defaults to ${configPath}`);
