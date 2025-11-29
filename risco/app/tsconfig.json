@@ -8,6 +8,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
+    "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
       "@vanackej/risco-lan-bridge/*": [
