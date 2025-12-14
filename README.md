@@ -39,6 +39,26 @@ npm run build
 ```
 2) Servicio systemd (con sudo/root para usar puerto 502)  
 `/etc/systemd/system/risco-gateway.service`
+Creación rápida del unit file:
+```bash
+sudo tee /etc/systemd/system/risco-gateway.service >/dev/null <<'EOF'
+[Unit]
+Description=Risco Gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Ejecutar como root para usar puerto 502
+User=root
+WorkingDirectory=/home/pi/risco_stack_RPi/risco/app
+ExecStart=/usr/bin/node /home/pi/risco_stack_RPi/risco/app/dist/main.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+```
 ```ini
 [Unit]
 Description=Risco Gateway
