@@ -9,7 +9,7 @@ import fs from 'fs';
 import { promises as fsp } from 'fs';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
-import { execFile } from 'child_process';
+import { spawn } from 'child_process';
 
 type PartitionState = { id: number; status: string; ready?: boolean };
 type ZoneState = { id: number; open: boolean; bypass: boolean; label: string };
@@ -339,13 +339,21 @@ export function startWebServer(
     if (!fs.existsSync(HOST_IP_SCRIPT)) {
       return res.status(501).json({ ok: false, error: 'host_ip_not_supported' });
     }
-    execFile('sudo', [HOST_IP_SCRIPT, ip, String(cidr), gateway], { timeout: 15000 }, (err, stdout, stderr) => {
-      if (err) {
-        return res.status(500).json({ ok: false, error: 'script_error', detail: stderr || err.message });
-      }
-      res.json({ ok: true, restarting: true, output: stdout });
-      setTimeout(() => process.exit(0), 500);
-    });
+
+    // Importante: si cambias la IP mientras navegas en /config, la conexión HTTP se corta.
+    // Responde rápido y aplica el cambio en background.
+    res.json({ ok: true, applying: true, restarting: true });
+
+    const args = [HOST_IP_SCRIPT, ip, String(cidr), gateway];
+    const isRoot = typeof process.getuid === 'function' && process.getuid() === 0;
+    const cmd = isRoot ? HOST_IP_SCRIPT : 'sudo';
+    const cmdArgs = isRoot ? [ip, String(cidr), gateway] : args;
+
+    setTimeout(() => {
+      const child = spawn(cmd, cmdArgs, { detached: true, stdio: 'ignore' });
+      child.unref();
+      setTimeout(() => process.exit(0), 750);
+    }, 250);
   });
 
   // Datos en tiempo real
