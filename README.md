@@ -47,7 +47,10 @@ npm run build
 ```
 
 ### 2) Primer arranque (manual)
-El servicio lee el config desde `/data/config.json`. Si no existe, copia los defaults.
+El servicio lee el config desde `~/risco_stack_RPi/risco/app/config.json` (o la ruta definida en `RISCO_MQTT_HA_CONFIG_FILE`).
+Si no existe, copia los defaults desde `risco/config.default.json`.
+
+Nota: cuando actualizas el repo con `git pull`, el `config.json` existente NO se sobrescribe (se mantiene tu configuración).
 
 En Raspberry, el puerto `502` requiere permisos de root (puerto <1024):
 ```bash
@@ -206,4 +209,3 @@ Raspberry Pi OS normalmente no entra en “sleep” como un PC, pero para máxim
     wifi.powersave = 2
     ```
   - Reiniciar: `sudo systemctl restart NetworkManager` (o reboot).
-
