@@ -140,6 +140,13 @@ export class Partition extends EventEmitter {
     }
   }
 
+  private formatPartitionSelector(): string {
+    // En comandos tipo ARM=/DISARM=/STAY=, el panel interpreta los números como lista de particiones (dígitos).
+    // Para particiones >= 10, se debe forzar el número completo con prefijo '*' (ej: *12) para evitar que "12" se lea como particiones 1 y 2.
+    if (this.Id >= 10) return `*${this.Id}`;
+    return `${this.Id}`;
+  }
+
   async awayArm(): Promise<boolean> {
     assertIsDefined(this.riscoComm.tcpSocket, 'RiscoComm.tcpSocket', 'TCP is not initialized')
     logger.log('debug', `Request for Full Arming partition ${this.Id}.`)
@@ -152,7 +159,7 @@ export class Partition extends EventEmitter {
 
       return true
     } else {
-      return await this.riscoComm.tcpSocket.getAckResult(`ARM=${this.Id}`)
+      return await this.riscoComm.tcpSocket.getAckResult(`ARM=${this.formatPartitionSelector()}`)
     }
   }
 
@@ -167,7 +174,7 @@ export class Partition extends EventEmitter {
       logger.log('debug', `No need to arm home partition ${this.Id} : partition already armed home`)
       return true
     } else {
-      return await this.riscoComm.tcpSocket.getAckResult(`STAY=${this.Id}`)
+      return await this.riscoComm.tcpSocket.getAckResult(`STAY=${this.formatPartitionSelector()}`)
     }
   }
 
@@ -178,7 +185,7 @@ export class Partition extends EventEmitter {
       logger.log('debug', `No need to disarm partition ${this.Id} : partition is not armed`)
       return true
     } else {
-      return await this.riscoComm.tcpSocket.getAckResult(`DISARM=${this.Id}`)
+      return await this.riscoComm.tcpSocket.getAckResult(`DISARM=${this.formatPartitionSelector()}`)
     }
   }
 }
