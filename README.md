@@ -99,6 +99,27 @@ sudo setcap 'cap_net_bind_service=+ep' /usr/bin/node
 ```
 y en el `service` usar `User=pi`. (Si usas esta alternativa, el cambio de IP desde la UI deberá ejecutarse con `sudoers`.)
 
+### 4) Actualizar el gateway en la Raspberry (git pull)
+Cada vez que subas cambios a GitHub y quieras aplicarlos en la Pi (sin reinstalar desde cero):
+```bash
+cd ~/risco_stack_RPi
+git pull
+
+cd ~/risco_stack_RPi/risco/risco-lan-bridge
+npm install --include=dev
+npm run build
+
+cd ~/risco_stack_RPi/risco/app
+npm install --include=dev
+npm run build
+
+sudo systemctl restart risco-gateway.service
+sudo journalctl -u risco-gateway.service -f
+```
+Notas:
+- Si cambiaste `risco-gateway.service`, corre `sudo systemctl daemon-reload` antes del restart.
+- Si cambiaste defaults en `risco/config.default.json`, NO sobrescribe tu `config.json` existente: revisa/merge manual en la UI o editando el archivo runtime.
+
 ## UI: credenciales y configuración
 - Login web por defecto: usuario `admin`, contraseña `Admin123` (se guarda hash en `/data/users.json`).
 - Página de configuración: `http://IP:8080/config`
