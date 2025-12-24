@@ -52,7 +52,7 @@ const CONFIG_DEFAULTS: RiscoConfig = {
   panel_node_id: null,
   web: {
     enable: false,
-    http_port: 8080,
+    http_port: 1001,
     ws_path: '/ws',
   },
   modbus: {
@@ -128,7 +128,7 @@ export function riscoMqttHomeAssistant(userConfig: RiscoConfig) {
     if (webHooks || !(config.web?.enable ?? false)) return;
     webHooks = startWebServer(
       {
-        http_port: config.web?.http_port || 8080,
+        http_port: config.web?.http_port || 1001,
         ws_path: config.web?.ws_path || '/ws',
       },
       {

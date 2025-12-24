@@ -26,7 +26,7 @@ docker compose down
 docker compose build --no-cache risco
 docker compose up -d
 ```
-- Web: `http://localhost:8080`
+- Web: `http://localhost:1001`
 - Modbus TCP: puerto `502`
 
 ## Raspberry Pi sin Docker (recomendado)
@@ -122,7 +122,7 @@ Notas:
 
 ## UI: credenciales y configuración
 - Login web por defecto: usuario `admin`, contraseña `Admin123` (se guarda hash en `/data/users.json`).
-- Página de configuración: `http://IP:8080/config`
+- Página de configuración: `http://IP:1001/config`
 - Botones: Guardar, Guardar y reiniciar, Reiniciar servicio, Restablecer a fábrica, Cambiar contraseña admin.
 
 ## Cambio de IP del Raspberry desde la UI (NetworkManager / nmcli)

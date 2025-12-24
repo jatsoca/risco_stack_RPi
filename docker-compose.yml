@@ -1,7 +1,7 @@
 services:
   risco:
     ports:
-      - "8080:8080"  # dashboard/WS
+      - "1001:1001"  # dashboard/WS
       - "502:502"    # Modbus TCP
     build:
       context: ./risco
@@ -13,7 +13,7 @@ services:
     volumes:
       - ./risco/data:/data
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      test: ["CMD", "wget", "-qO-", "http://localhost:1001/health"]
       interval: 30s
       timeout: 5s
       retries: 3

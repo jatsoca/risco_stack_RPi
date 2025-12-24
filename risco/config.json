@@ -5,7 +5,7 @@
   "heartbeat_interval_ms": 30000,
   "web": {
     "enable": true,
-    "http_port": 8080,
+    "http_port": 1001,
     "ws_path": "/ws"
   },
   "modbus": {

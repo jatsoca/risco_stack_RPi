@@ -29,7 +29,7 @@ COPY --from=build /risco-lan-bridge /risco-lan-bridge
 COPY ./app/config-sample.json ./config-sample.json
 COPY ./config.default.json ./config.default.json
 
-EXPOSE 8080 502
+EXPOSE 1001 502
 VOLUME ["/data"]
 
 CMD ["node", "dist/main.js"]
