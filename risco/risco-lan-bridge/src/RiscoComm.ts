@@ -67,7 +67,7 @@ export class RiscoComm extends TypedEmitter<RiscoCommEvents> {
 
     this.socketOptions = {
       socketMode: options.socketMode || 'direct',
-      panelIp: options.panelIp || '192.168.0.100',
+      panelIp: options.panelIp || '172.16.85.2',
       panelPort: options.panelPort || 1000,
       panelId: panelId,
       panelPassword: options.panelPassword && RiscoComm.looksLikePanelPwd(options.panelPassword) ? options.panelPassword.toString() : '5678',

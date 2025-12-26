@@ -14,7 +14,7 @@
     "host": "0.0.0.0"
   },
   "panel": {
-    "panelIp": "172.16.84.2",
+    "panelIp": "172.16.85.2",
     "panelPort": 1000,
     "panelPassword": 5678,
     "panelId": "0001",
