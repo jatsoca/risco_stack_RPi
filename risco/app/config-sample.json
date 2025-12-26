@@ -1,22 +1,30 @@
 {
   "log": "info",
-  "panel_name": "Custom panel name",
+  "logColorize": true,
+  "panel_name": "Risco Alarm",
+  "heartbeat_interval_ms": 30000,
+  "web": {
+    "enable": true,
+    "http_port": 1001,
+    "ws_path": "/ws"
+  },
+  "modbus": {
+    "enable": true,
+    "port": 502,
+    "host": "0.0.0.0"
+  },
   "panel": {
-    "panelIp": "192.168.1.150",
+    "panelIp": "172.16.84.2",
     "panelPort": 1000,
-    "panelPassword": 1234,
+    "panelPassword": 5678,
     "panelId": "0001",
-    "watchDogInterval": 10000
+    "socketMode": "direct",
+    "watchDogInterval": 5000,
+    "commandsLog": true
   },
   "zones": {
     "default": {
-      "off_delay": 30,
-      "name_prefix": "Sensor - "
-    },
-    "GARAGE": {
       "off_delay": 0,
-      "device_class": "garage_door",
-      "name": "Garage Door",
       "name_prefix": ""
     }
   }
