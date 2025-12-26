@@ -31,6 +31,7 @@ import { RiscoComm } from '../RiscoComm'
 import { EventEmitter } from 'events'
 import { logger } from '../Logger'
 import { assertIsDefined } from '../Assertions'
+import { RiscoCommandError } from '../RiscoError'
 
 export class Partition extends EventEmitter {
   Id: number
@@ -140,11 +141,43 @@ export class Partition extends EventEmitter {
     }
   }
 
-  private formatPartitionSelector(): string {
-    // En comandos tipo ARM=/DISARM=/STAY=, el panel interpreta los números como lista de particiones (dígitos).
-    // Para particiones >= 10, se debe forzar el número completo con prefijo '*' (ej: *12) para evitar que "12" se lea como particiones 1 y 2.
-    if (this.Id >= 10) return `*${this.Id}`;
-    return `${this.Id}`;
+  private partitionSelectors(): string[] {
+    const selector = `${this.Id}`
+    if (this.Id < 10) return [selector]
+
+    // Some panels accept only plain numeric selectors for 2-digit partitions.
+    const preferPlain = (this.riscoComm.panelInfo?.MaxParts ?? 0) > 9
+    return preferPlain ? [selector, `*${selector}`] : [`*${selector}`, selector]
+  }
+
+  private async sendPartitionCommand(command: string): Promise<boolean> {
+    assertIsDefined(this.riscoComm.tcpSocket, 'RiscoComm.tcpSocket', 'TCP is not initialized')
+    const tcpSocket = this.riscoComm.tcpSocket
+    const selectors = this.partitionSelectors()
+
+    for (let i = 0; i < selectors.length; i++) {
+      const selector = selectors[i]
+      const isLast = i === selectors.length - 1
+      try {
+        const response = await tcpSocket.sendCommand(`${command}=${selector}`)
+        if (response === 'ACK') {
+          return true
+        }
+        const error = tcpSocket.getErrorCode(response)
+        if (!isLast && error?.[0] === 'N05') {
+          logger.log('warn', `Command ${command} rejected for partition ${this.Id} with selector '${selector}' (N05). Trying fallback.`)
+          continue
+        }
+        return false
+      } catch (err) {
+        if (!isLast && err instanceof RiscoCommandError) {
+          logger.log('warn', `Command ${command} timeout for partition ${this.Id} with selector '${selector}'. Trying fallback.`)
+          continue
+        }
+        throw err
+      }
+    }
+    return false
   }
 
   async awayArm(): Promise<boolean> {
@@ -159,7 +192,7 @@ export class Partition extends EventEmitter {
 
       return true
     } else {
-      return await this.riscoComm.tcpSocket.getAckResult(`ARM=${this.formatPartitionSelector()}`)
+      return await this.sendPartitionCommand('ARM')
     }
   }
 
@@ -174,7 +207,7 @@ export class Partition extends EventEmitter {
       logger.log('debug', `No need to arm home partition ${this.Id} : partition already armed home`)
       return true
     } else {
-      return await this.riscoComm.tcpSocket.getAckResult(`STAY=${this.formatPartitionSelector()}`)
+      return await this.sendPartitionCommand('STAY')
     }
   }
 
@@ -185,7 +218,7 @@ export class Partition extends EventEmitter {
       logger.log('debug', `No need to disarm partition ${this.Id} : partition is not armed`)
       return true
     } else {
-      return await this.riscoComm.tcpSocket.getAckResult(`DISARM=${this.formatPartitionSelector()}`)
+      return await this.sendPartitionCommand('DISARM')
     }
   }
 }
